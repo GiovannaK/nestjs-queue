@@ -1,5 +1,5 @@
 import { MailerService } from "@nestjs-modules/mailer";
-import { Process, Processor } from "@nestjs/bull";
+import { OnQueueActive, OnQueueCompleted, OnQueueProgress, Process, Processor } from "@nestjs/bull";
 import { Job } from "bull";
 import { CreateUserDto } from "src/create-user/createUserDto";
 
@@ -18,5 +18,20 @@ export class SendMailConsumer{
       subject: 'Welcome!',
       text: `Olá ${data.name}`
     })
+  }
+
+  @OnQueueCompleted()
+  onCompleted(job: Job){
+    console.log(`On Completed ${job.name}`)
+  }
+
+  @OnQueueProgress()
+  onQueueProgress(job: Job){
+    console.log(`On Progress ${job.name}`)
+  }
+
+  @OnQueueActive()
+  onQueueActive(job: Job){
+    console.log(`On Active ${job.name}`)
   }
 }
